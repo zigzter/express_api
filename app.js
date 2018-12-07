@@ -1,14 +1,21 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const User = require('./models/user');
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('hello');
+app.get('/users', (req, res) => {
+    res.status(200).send();
 });
 
-
-const PORT = 3000;
-
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${ PORT }`);
+app.post('/users', (req, res) => {
+    const { username, password } = req.body;
+    const user = User.create({ username, password });
+    res.status(200).json(user);
 });
+
+app.get('/users/:id', (req, res) => {
+    // retrieve user
+});
+
+module.exports = app;

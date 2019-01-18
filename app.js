@@ -13,12 +13,15 @@ app.get('/users', async (req, res) => {
 
 app.post('/users', async (req, res) => {
     const { username, password } = req.body;
+    if (!username || !password) return res.status(400).send()
     const user = await User.create({ username, password });
     res.status(200).json(user);
 });
 
-app.get('/users/:id', (req, res) => {
-    // retrieve user
+app.get('/users/:id', async (req, res) => {
+    const user = await User.find(req.params.id);
+    if (!user) return res.status(404).send();
+    res.status(200).send({ user });
 });
 
 module.exports = app;

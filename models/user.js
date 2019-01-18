@@ -8,7 +8,7 @@ module.exports = class User {
     }
     static async find(username) {
         if (username) {
-            return knex('users').where({ username }).first();
+            return knex('users').where({ username }).first().select('id', 'username');
         }
         const users = await knex('users');
         return users;

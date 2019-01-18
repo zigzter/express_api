@@ -21,6 +21,10 @@ module.exports = {
       database: 'express_api_test',
       username: 'ziggy',
       password: 'yeezy'
+    },
+    migrations: {
+      tableName: 'migrations',
+      directory: './db/migrations'
     }
   }
 

@@ -14,7 +14,7 @@ afterAll(() => {
 describe('GET /users', () => {
     test('it should respond with a list of users', (done) => {
         request(app)
-            .get('/users')
+            .get('/api/users')
             .expect(200)
             .expect((res) => {
                 expect(res.body.users.length).toBe(2);
@@ -26,7 +26,7 @@ describe('GET /users', () => {
 describe('POST /users', () => {
     test('it should save to db with valid data', (done) => {
         request(app)
-            .post('/users')
+            .post('/api/users')
             .send({ username: 'bob', password: 'woow' })
             .expect(200)
             .expect((res) => {
@@ -42,7 +42,7 @@ describe('POST /users', () => {
     });
     test('it should not save to db with invalid data', (done) => {
         request(app)
-            .post('/users')
+            .post('/api/users')
             .send({ username: 'pete' })
             .expect(400)
             .end((err, res) => {
@@ -58,7 +58,7 @@ describe('POST /users', () => {
 describe('GET /users/:id', () => {
     test('it returns a user if found', (done) => {
         request(app)
-            .get('/users/bob')
+            .get('/api/users/bob')
             .expect(200)
             .expect((res) => {
                 expect(res.body.user.username).toBe('bob')
@@ -67,7 +67,7 @@ describe('GET /users/:id', () => {
     });
     test('it returns 404 if user not found', (done) => {
         request(app)
-            .get('/users/nousernamedthis')
+            .get('/api/users/nousernamedthis')
             .expect(404)
             .end(done);
     })

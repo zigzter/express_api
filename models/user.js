@@ -7,10 +7,7 @@ module.exports = class User {
         return knex('users').insert({ username, passwordDigest }).returning('username');
     }
     static async find(username) {
-        if (username) {
-            return knex('users').where({ username }).first().select('id', 'username');
-        }
-        const users = await knex('users');
-        return users;
+        if (!username) return knex('users');
+        return knex('users').where({ username }).first().select('id', 'username');
     }
 }

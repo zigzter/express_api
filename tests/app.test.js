@@ -2,10 +2,11 @@ const request = require('supertest');
 const expect = require('expect');
 const app = require('../app');
 const knex = require('./../db/client');
-const { seedUsers } = require('./seed/seed');
+const { seedUsers, seedSubs } = require('./seed/seed');
 const User = require('./../models/user');
 
 beforeAll(seedUsers);
+beforeAll(seedSubs);
 
 afterAll(() => {
     knex.destroy();
@@ -52,7 +53,7 @@ describe('POST /users', () => {
                     done();
                 }).catch(e => done(e));
             });
-    })
+    });
 });
 
 describe('GET /users/:id', () => {
@@ -70,5 +71,17 @@ describe('GET /users/:id', () => {
             .get('/api/users/nousernamedthis')
             .expect(404)
             .end(done);
-    })
+    });
+});
+
+describe('GET /r', () => {
+    test('it returns an index of subreddits', (done) => {
+        request(app)
+            .get('/api/r')
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.subreddits.length).toBe(2);
+            })
+            .end(done);
+    });
 });

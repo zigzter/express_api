@@ -17,6 +17,22 @@ const users = [
     },
 ];
 
+const subreddits = [
+    {
+        name: 'vancouver',
+        description: 'Why is everyone here so salty'
+    },
+    {
+        name: 'hiphopheads',
+        description: 'Money trees is the perfect place for shade'
+    }
+]
+
+const seedSubs = async () => {
+    await knex('subreddits').del();
+    return Promise.all(subreddits.map(r => knex('subreddits').insert(r)));
+}
+
 const seedUsers = async () => {
     await knex('users').del();
     return Promise.all(users.map(user => knex('users').insert(user)));
@@ -25,4 +41,5 @@ const seedUsers = async () => {
 module.exports = {
     users,
     seedUsers,
+    seedSubs,
 };

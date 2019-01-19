@@ -1,3 +1,3 @@
 # Express API
 
-Small project to practice building a RESTful API using Node/Express and testing with Jest/Supertest.
+Small Reddit clone to practice building a RESTful API using Node/Express, authentication using JWTs, and testing using Jest/Supertest.

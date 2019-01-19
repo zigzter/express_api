@@ -118,3 +118,15 @@ describe('POST /r', () => {
             });
     });
 });
+
+describe('GET /r/:id', () => {
+    test('it returns subreddit info', (done) => {
+        request(app)
+            .get('/api/r/hiphopheads')
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.subreddit.name).toBe('hiphopheads');
+            })
+            .end(done);
+    });
+});

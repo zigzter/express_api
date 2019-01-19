@@ -4,6 +4,7 @@ const app = require('../app');
 const knex = require('./../db/client');
 const { seedUsers, seedSubs } = require('./seed/seed');
 const User = require('./../models/user');
+const Subreddit = require('./../models/subreddit');
 
 beforeAll(seedUsers);
 beforeAll(seedSubs);
@@ -83,5 +84,37 @@ describe('GET /r', () => {
                 expect(res.body.subreddits.length).toBe(2);
             })
             .end(done);
+    });
+});
+
+describe('POST /r', () => {
+    test('it creates a new subreddit', (done) => {
+        request(app)
+            .post('/api/r')
+            .send({ name: 'gzcl', description: 'eat burritos' })
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.subreddit.name).toBe('gzcl');
+            })
+            .end((err, res) => {
+                if (err) return done(err);
+                Subreddit.find().then((subs) => {
+                    expect(subs.length).toBe(3);
+                    done();
+                }).catch(e => done(e));
+            });
+    });
+    test('it does not create a new subreddit with invalid data', (done) => {
+        request(app)
+            .post('/api/r')
+            .send({ description: 'aw heck no name provided' })
+            .expect(400)
+            .end((err, res) => {
+                if (err) return done(err);
+                Subreddit.find().then((subs) => {
+                    expect(subs.length).toBe(3);
+                    done();
+                }).catch(e => done(e));
+            });
     });
 });

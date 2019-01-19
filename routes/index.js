@@ -9,5 +9,6 @@ router.post('/users', userController.create);
 router.get('/users/:id', userController.show);
 
 router.get('/r', subredditController.index);
+router.post('/r', subredditController.create);
 
 module.exports = router;

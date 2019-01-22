@@ -146,3 +146,20 @@ describe('GET /r/:id', () => {
             .end(done);
     });
 });
+
+describe('POST /session', () => {
+    test('it returns 400 if username or password is blank', (done) => {
+        request(app)
+            .post('/api/session')
+            .send({ username: 'bob' })
+            .expect(400)
+            .end(done);
+    });
+    test('it returns 400 if password is incorrect', (done) => {
+        request(app)
+            .post('/api/session')
+            .send({ username: 'bob', password: 'wrong' })
+            .expect(400)
+            .end(done);
+    });
+});

@@ -18,4 +18,8 @@ module.exports = class User {
         if (!username) return knex('users');
         return knex('users').where({ username }).first().select('id', 'username');
     }
+    static async authenticate(username, password) {
+        const user = await knex('users').where({ username }).first();
+        return bcrypt.compare(password, user.passwordDigest);
+    }
 }

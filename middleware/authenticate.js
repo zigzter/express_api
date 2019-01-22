@@ -1,7 +1,5 @@
 const User = require('./../models/user');
 
-const auth = (req, res, next) => {
-
+module.exports = (req, res, next) => {
+    next();
 };
-
-export default auth;

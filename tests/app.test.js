@@ -32,7 +32,7 @@ describe('POST /users', () => {
             .send({ username: 'bob', password: 'woow' })
             .expect(200)
             .expect((res) => {
-                expect(res.body[0]).toBe('bob');
+                expect(res.body.username).toBe('bob');
             })
             .end((err, res) => {
                 if (err) return done(err);
@@ -41,6 +41,16 @@ describe('POST /users', () => {
                     done();
                 }).catch(e => done(e));
             });
+    });
+    test('it should send the jwt token', (done) => {
+        request(app)
+            .post('/api/users')
+            .send({ username: 'steve', password: 'woow' })
+            .expect(200)
+            .expect((res) => {
+                expect(res.header['x-auth']).toBeTruthy();
+            })
+            .end(done);
     });
     test('it should not save to db with invalid data', (done) => {
         request(app)
@@ -127,6 +137,12 @@ describe('GET /r/:id', () => {
             .expect((res) => {
                 expect(res.body.subreddit.name).toBe('hiphopheads');
             })
+            .end(done);
+    });
+    test('it returns 404 if not found', (done) => {
+        request(app)
+            .get('/api/r/nope')
+            .expect(404)
             .end(done);
     });
 });

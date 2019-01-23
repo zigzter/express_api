@@ -1,7 +1,7 @@
 const knex = require('../db/client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+const { JWT_KEY } = process.env;
 
 module.exports = class User {
     static async create({ username, password }) {
@@ -11,7 +11,7 @@ module.exports = class User {
             id: user.id,
             access: 'auth',
         }
-        user.token = jwt.sign(payload, 'replacethis').toString();
+        user.token = jwt.sign(payload, JWT_KEY).toString();
         return user;
     }
     static async find(username) {

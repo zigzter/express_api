@@ -162,4 +162,14 @@ describe('POST /session', () => {
             .expect(400)
             .end(done);
     });
+    test('it sets an x-auth header with a JWT token', (done) => {
+        request(app)
+            .post('/api/session')
+            .send({ username: 'bob', password: 'woow' })
+            .expect(200)
+            .expect((res) => {
+                expect(res.header['x-auth'].length).toBeGreaterThan(20);
+            })
+            .end(done)
+    });
 });

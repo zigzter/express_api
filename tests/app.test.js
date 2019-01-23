@@ -1,13 +1,25 @@
 const request = require('supertest');
 const expect = require('expect');
+const jwt = require('jsonwebtoken');
+
 const app = require('../app');
 const knex = require('./../db/client');
 const { seedUsers, seedSubs } = require('./seed/seed');
 const User = require('./../models/user');
 const Subreddit = require('./../models/subreddit');
 
+const { JWT_KEY } = process.env;
+
+
+let user1token;
+
 beforeAll(seedUsers);
 beforeAll(seedSubs);
+beforeAll(async () => {
+    await User.find('yeezus').then((user) => {
+        user1token = jwt.sign({ id: user.id, access: 'auth' }, JWT_KEY).toString();
+    });
+})
 
 afterAll(() => {
     knex.destroy();
@@ -99,8 +111,10 @@ describe('GET /r', () => {
 
 describe('POST /r', () => {
     test('it creates a new subreddit', (done) => {
+        console.log(user1token);
         request(app)
             .post('/api/r')
+            .set('x-auth', user1token)
             .send({ name: 'gzcl', description: 'eat burritos' })
             .expect(200)
             .expect((res) => {
@@ -117,6 +131,7 @@ describe('POST /r', () => {
     test('it does not create a new subreddit with invalid data', (done) => {
         request(app)
             .post('/api/r')
+            .set('x-auth', user1token)
             .send({ description: 'aw heck no name provided' })
             .expect(400)
             .end((err, res) => {

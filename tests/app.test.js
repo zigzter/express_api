@@ -1,15 +1,14 @@
 const request = require('supertest');
-const expect = require('expect');
 const jwt = require('jsonwebtoken');
+const expect = require('expect');
 
-const app = require('../app');
-const knex = require('./../db/client');
 const { seedUsers, seedSubs } = require('./seed/seed');
-const User = require('./../models/user');
 const Subreddit = require('./../models/subreddit');
+const User = require('./../models/user');
+const knex = require('./../db/client');
+const app = require('../app');
 
 const { JWT_KEY } = process.env;
-
 
 let user1token;
 
@@ -111,7 +110,6 @@ describe('GET /r', () => {
 
 describe('POST /r', () => {
     test('it creates a new subreddit', (done) => {
-        console.log(user1token);
         request(app)
             .post('/api/r')
             .set('x-auth', user1token)

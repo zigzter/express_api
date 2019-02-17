@@ -14,5 +14,8 @@ module.exports = {
             return res.status(200).set('x-auth', token).send();
         }
         res.status(400).send();
-    }
+    },
+    destroy(req, res) {
+        res.status(200).set('x-auth', undefined).send();
+    },
 }

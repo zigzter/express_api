@@ -59,7 +59,7 @@ describe('POST /users', () => {
             .send({ username: 'steve', password: 'woow' })
             .expect(200)
             .expect((res) => {
-                expect(res.header['x-auth']).toBeTruthy();
+                expect(res.header['authorization']).toBeTruthy();
             })
             .end(done);
     });
@@ -112,7 +112,7 @@ describe('POST /r', () => {
     test('it creates a new subreddit', (done) => {
         request(app)
             .post('/api/r')
-            .set('x-auth', user1token)
+            .set('Authorization', `Bearer ${ user1token }`)
             .send({ name: 'gzcl', description: 'eat burritos' })
             .expect(200)
             .expect((res) => {
@@ -129,7 +129,7 @@ describe('POST /r', () => {
     test('it does not create a new subreddit with invalid data', (done) => {
         request(app)
             .post('/api/r')
-            .set('x-auth', user1token)
+            .set('Authorization', `Bearer ${ user1token }`)
             .send({ description: 'aw heck no name provided' })
             .expect(400)
             .end((err, res) => {
@@ -175,13 +175,13 @@ describe('POST /session', () => {
             .expect(400)
             .end(done);
     });
-    test('it sets an x-auth header with a JWT token', (done) => {
+    test('it sets an Authorization header with a JWT token', (done) => {
         request(app)
             .post('/api/session')
             .send({ username: 'bob', password: 'woow' })
             .expect(200)
             .expect((res) => {
-                expect(res.header['x-auth'].length).toBeGreaterThan(20);
+                expect(res.header['authorization'].length).toBeGreaterThan(20);
             })
             .end(done);
     });

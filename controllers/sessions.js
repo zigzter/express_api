@@ -10,8 +10,8 @@ module.exports = {
         const user = await User.find(username);
         if (!user) return res.status(400).send();
         if (await User.authenticate(user.username, password)) {
-            const token = jwt.sign({ id: user.id, access: 'auth' }, JWT_KEY).toString();
-            return res.status(200).set('x-auth', token).send();
+            const token = jwt.sign({ id: user.id, access: 'auth' }, JWT_KEY, { expiresIn: "7d" }).toString();
+            return res.status(200).set('Authorization', `Bearer ${ token }`).send();
         }
         res.status(400).send();
     },

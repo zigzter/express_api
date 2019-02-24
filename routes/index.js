@@ -15,6 +15,5 @@ router.post('/r', authenticate, subredditController.create);
 router.get('/r/:name', subredditController.show);
 
 router.post('/session', sessionController.create);
-router.delete('/session', sessionController.destroy);
 
 module.exports = router;

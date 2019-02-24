@@ -183,6 +183,6 @@ describe('POST /session', () => {
             .expect((res) => {
                 expect(res.header['x-auth'].length).toBeGreaterThan(20);
             })
-            .end(done)
+            .end(done);
     });
 });

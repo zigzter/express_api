@@ -6,6 +6,6 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/api', indexRouter);
+app.use('/api/v1', indexRouter);
 
 module.exports = app;

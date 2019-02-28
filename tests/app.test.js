@@ -10,7 +10,7 @@ const app = require('../app');
 
 const { JWT_KEY } = process.env;
 
-const API = '/api/v1';
+const API_PREFIX = '/api/v1';
 
 let user1token;
 
@@ -29,7 +29,7 @@ afterAll(() => {
 describe('GET /users', () => {
     test('it should respond with a list of users', (done) => {
         request(app)
-            .get(API + '/users')
+            .get(API_PREFIX + '/users')
             .expect(200)
             .expect((res) => {
                 expect(res.body.users.length).toBe(2);
@@ -41,7 +41,7 @@ describe('GET /users', () => {
 describe('POST /users', () => {
     test('it should save to db with valid data', (done) => {
         request(app)
-            .post(API + '/users')
+            .post(API_PREFIX + '/users')
             .send({ username: 'bob', password: 'woow' })
             .expect(200)
             .expect((res) => {
@@ -57,7 +57,7 @@ describe('POST /users', () => {
     });
     test('it should send the jwt token', (done) => {
         request(app)
-            .post(API + '/users')
+            .post(API_PREFIX + '/users')
             .send({ username: 'steve', password: 'woow' })
             .expect(200)
             .expect((res) => {
@@ -67,7 +67,7 @@ describe('POST /users', () => {
     });
     test('it should not save to db with invalid data', (done) => {
         request(app)
-            .post(API + '/users')
+            .post(API_PREFIX + '/users')
             .send({ username: 'pete' })
             .expect(400)
             .end((err, res) => {
@@ -83,7 +83,7 @@ describe('POST /users', () => {
 describe('GET /users/:id', () => {
     test('it returns a user if found', (done) => {
         request(app)
-            .get(API + '/users/bob')
+            .get(API_PREFIX + '/users/bob')
             .expect(200)
             .expect((res) => {
                 expect(res.body.user.username).toBe('bob')
@@ -92,7 +92,7 @@ describe('GET /users/:id', () => {
     });
     test('it returns 404 if user not found', (done) => {
         request(app)
-            .get(API + '/users/nousernamedthis')
+            .get(API_PREFIX + '/users/nousernamedthis')
             .expect(404)
             .end(done);
     });
@@ -101,7 +101,7 @@ describe('GET /users/:id', () => {
 describe('GET /r', () => {
     test('it returns an index of subreddits', (done) => {
         request(app)
-            .get(API + '/r')
+            .get(API_PREFIX + '/r')
             .expect(200)
             .expect((res) => {
                 expect(res.body.subreddits.length).toBe(2);
@@ -113,7 +113,7 @@ describe('GET /r', () => {
 describe('POST /r', () => {
     test('it creates a new subreddit', (done) => {
         request(app)
-            .post(API + '/r')
+            .post(API_PREFIX + '/r')
             .set('Authorization', `Bearer ${ user1token }`)
             .send({ name: 'gzcl', description: 'eat burritos' })
             .expect(200)
@@ -130,7 +130,7 @@ describe('POST /r', () => {
     });
     test('it does not create a new subreddit with invalid data', (done) => {
         request(app)
-            .post(API + '/r')
+            .post(API_PREFIX + '/r')
             .set('Authorization', `Bearer ${ user1token }`)
             .send({ description: 'aw heck no name provided' })
             .expect(400)
@@ -147,7 +147,7 @@ describe('POST /r', () => {
 describe('GET /r/:id', () => {
     test('it returns subreddit info', (done) => {
         request(app)
-            .get(API + '/r/hiphopheads')
+            .get(API_PREFIX + '/r/hiphopheads')
             .expect(200)
             .expect((res) => {
                 expect(res.body.subreddit.name).toBe('hiphopheads');
@@ -156,7 +156,7 @@ describe('GET /r/:id', () => {
     });
     test('it returns 404 if not found', (done) => {
         request(app)
-            .get(API + '/r/nope')
+            .get(API_PREFIX + '/r/nope')
             .expect(404)
             .end(done);
     });
@@ -165,21 +165,21 @@ describe('GET /r/:id', () => {
 describe('POST /session', () => {
     test('it returns 400 if username or password is blank', (done) => {
         request(app)
-            .post(API + '/session')
+            .post(API_PREFIX + '/session')
             .send({ username: 'bob' })
             .expect(400)
             .end(done);
     });
     test('it returns 400 if password is incorrect', (done) => {
         request(app)
-            .post(API + '/session')
+            .post(API_PREFIX + '/session')
             .send({ username: 'bob', password: 'wrong' })
             .expect(400)
             .end(done);
     });
     test('it sets an Authorization header with a JWT token', (done) => {
         request(app)
-            .post(API + '/session')
+            .post(API_PREFIX + '/session')
             .send({ username: 'bob', password: 'woow' })
             .expect(200)
             .expect((res) => {

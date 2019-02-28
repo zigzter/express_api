@@ -5,7 +5,7 @@ module.exports = class Subreddit {
         if (!name) return knex('subreddits');
         return knex('subreddits').where({ name }).first();
     }
-    static async create(name, description) {
-        return knex('subreddits').insert({ name, description });
+    static async create(name, description, sidebar) {
+        return knex('subreddits').insert({ name, description, sidebar });
     }
 }

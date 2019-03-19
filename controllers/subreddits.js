@@ -8,8 +8,9 @@ module.exports = {
     async create(req, res) {
         const { name, description, sidebar } = req.body;
         if (!name || !description) return res.status(400).send();
-        await Subreddit.create(name, description, sidebar);
-        res.status(200).json({ subreddit: { name, description } });
+        const { subreddit, error } = await Subreddit.create(name, description, sidebar);
+        if (error) return res.status(400).send(error);
+        res.status(200).json({ subreddit });
     },
     async show(req, res) {
         const { name } = req.params;

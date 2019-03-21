@@ -6,7 +6,8 @@ module.exports = class Subreddit {
         return knex('subreddits').where({ name }).first();
     }
     static async create(name, description, sidebar) {
-        if (name.length < 3) return { error: 'Name must be at least 3 characters' }
+        if (name.length < 3) return { error: 'Name must be at least 3 characters' };
+        if (description.length < 5) return { error: 'Description must be at least 5 characters' };
         const [subreddit] = await knex('subreddits').insert({ name, description, sidebar }).returning(['name', 'description', 'sidebar']);
         return { subreddit };
     }

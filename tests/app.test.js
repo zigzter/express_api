@@ -45,7 +45,7 @@ describe('POST /users', () => {
             .send({ username: 'bob', password: 'woow' })
             .expect(200)
             .expect((res) => {
-                expect(res.body.username).toBe('bob');
+                expect(res.body.user.username).toBe('bob');
             })
             .end((err, res) => {
                 if (err) return done(err);

@@ -9,7 +9,7 @@ module.exports = {
         const { name, description, sidebar } = req.body;
         if (!name || !description) return res.status(400).send();
         const { subreddit, error } = await Subreddit.create(name, description, sidebar);
-        if (error) return res.status(400).send(error);
+        if (error) return res.status(400).json(error);
         res.status(200).json({ subreddit });
     },
     async show(req, res) {

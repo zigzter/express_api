@@ -4,14 +4,16 @@ const jwt = require('jsonwebtoken');
 
 module.exports = class User {
     static async create({ username, password }) {
+        const duplicateUser = await knex('users').where({ username }).first();
+        if (duplicateUser) return { error: 'Username already exists' };
         const passwordDigest = await bcrypt.hash(password, 10);
         const [user] = await knex('users').insert({ username, passwordDigest }).returning(['username', 'id']);
         const payload = {
             id: user.id,
             access: 'auth',
-        }
+        };
         user.token = jwt.sign(payload, process.env.JWT_KEY).toString();
-        return user;
+        return { user };
     }
     static async find(username) {
         if (!username) return knex('users');

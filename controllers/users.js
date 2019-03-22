@@ -7,8 +7,9 @@ module.exports = {
     },
     async create(req, res) {
         const { username, password } = req.body;
-        if (!username || !password) return res.status(400).send()
-        const user = await User.create({ username, password });
+        if (!username || !password) return res.status(400).send();
+        const { user, error } = await User.create({ username, password });
+        if (error) return res.status(400).json(error);
         res.status(200).header('Authorization', `Bearer ${ user.token }`).json(user);
     },
     async show(req, res) {

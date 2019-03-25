@@ -15,7 +15,7 @@ router.get('/r', subredditController.index);
 router.post('/r', authenticate, subredditController.create);
 router.get('/r/:name', subredditController.show);
 
-router.post('/r/:name', submissionController.create);
+router.post('/r/:name', authenticate, submissionController.create);
 
 router.post('/session', sessionController.create);
 

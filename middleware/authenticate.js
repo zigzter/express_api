@@ -8,5 +8,6 @@ module.exports = (req, res, next) => {
     const token = tokenString.split(' ')[1];
     const decoded = jwt.verify(token, JWT_KEY);
     if (decoded.access !== 'auth') return res.status(401).send();
+    res.userId = decoded.id;
     next();
 };

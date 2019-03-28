@@ -2,8 +2,9 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const expect = require('expect');
 
-const { seedUsers, seedSubs } = require('./seed/seed');
+const { seedUsers, seedSubs, seedSubmissions } = require('./seed/seed');
 const Subreddit = require('./../models/subreddit');
+const Submission = require('./../models/submission');
 const User = require('./../models/user');
 const knex = require('./../db/client');
 const app = require('../app');
@@ -16,6 +17,7 @@ let user1token;
 
 beforeAll(seedUsers);
 beforeAll(seedSubs);
+beforeAll(seedSubmissions);
 beforeAll(async () => {
     await User.find('yeezus').then((user) => {
         user1token = jwt.sign({ id: user.id, access: 'auth' }, JWT_KEY).toString();
@@ -186,5 +188,22 @@ describe('POST /session', () => {
                 expect(res.header['authorization'].length).toBeGreaterThan(20);
             })
             .end(done);
+    });
+});
+
+describe('POST /:name', () => {
+    test('creates a submission with valid data', (done) => {
+        request(app)
+            .post(API_PREFIX + '/r/hiphopheads')
+            .set('Authorization', `Bearer ${ user1token }`)
+            .send({ type: 'text', title: 'Title of post', text: 'Some text here about the post' })
+            .expect(200)
+            .end((err, res) => {
+                if (err) return done(err);
+                Submission.find(res.body.submission.short_id).then(({ submission }) => {
+                    expect(submission).toBeTruthy();
+                    done();
+                });
+            });
     });
 });

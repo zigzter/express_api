@@ -206,4 +206,12 @@ describe('POST /:name', () => {
                 });
             });
     });
+    test('it does not create a submission with invalid data', (done) => {
+        request(app)
+            .post(API_PREFIX + '/r/hiphopheads')
+            .set('Authorization', `Bearer ${ user1token }`)
+            .send({ title: 'This is missing a type key', text: 'This text does not matter' })
+            .expect(400)
+            .end(done);
+    });
 });

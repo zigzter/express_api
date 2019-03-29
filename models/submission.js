@@ -16,8 +16,15 @@ module.exports = class Submission {
     static async find(short_id) {
         if (short_id.length !== 8) return { error: 'Please enter valid id' };
         const submission = await knex('submissions').where({ short_id }).first();
-        return (submission) ? { submission } : { error: 'Submission not found' }
+        return (submission) ? { submission } : { error: 'Submission not found' };
     }
-    // edit
+    static async edit({ short_id, title, url, text }) {
+        if (short_id.length !== 8) return { error: 'Please enter valid id' };
+        const submission = await knex('submissions')
+            .where({ short_id })
+            .update({ title, url, text })
+            .returning(['short_id', 'author_id', 'title', 'url', 'text']);
+        return (submission) ? { submission } : { error: 'Submission not found' };
+    }
     // delete
 }

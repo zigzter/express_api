@@ -18,7 +18,13 @@ module.exports = {
         const { submission, error } = await Submission.find(short_id);
         if (error) return res.status(404).json({ error });
         res.status(200).json({ submission });
-    }
-    // edit
+    },
+    async edit(req, res) {
+        const { short_id } = req.params;
+        const { title, url, text } = req.body;
+        const { submission, error } = await Submission.edit({ short_id, title, url, text });
+        if (error) return res.status(400).json({ error });
+        res.status(200).json({ submission });
+    },
     // delete (moderator vs user?)
 }

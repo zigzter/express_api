@@ -17,6 +17,7 @@ router.get('/r/:name', subredditController.show);
 
 router.post('/r/:name', authenticate, submissionController.create);
 router.get('/r/:name/:short_id', submissionController.show);
+router.patch('/r/:name/:short_id', authenticate, submissionController.edit);
 
 router.post('/session', sessionController.create);
 

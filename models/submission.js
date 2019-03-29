@@ -14,7 +14,7 @@ module.exports = class Submission {
         return { submission };
     }
     static async find(short_id) {
-        if (!short_id) return { error: 'Please specify short id' }
+        if (short_id.length !== 8) return { error: 'Please enter valid id' };
         const submission = await knex('submissions').where({ short_id }).first();
         return (submission) ? { submission } : { error: 'Submission not found' }
     }

@@ -2,7 +2,6 @@ const Submission = require('../models/submission');
 const Subreddit = require('../models/subreddit');
 
 module.exports = {
-    // index
     async create(req, res) {
         const author_id = res.userId;
         const { name } = req.params;
@@ -13,8 +12,14 @@ module.exports = {
         const { submission, error } = await Submission.create({ subreddit_id, title, author_id, url, text, type });
         if (error) return res.status(400).json({ error });
         res.status(200).json({ submission });
+    },
+    async show(req, res) {
+        const { short_id, name } = req.params;
+        if (short_id.length !== 8) return res.status(400).json({ error: 'Please enter valid id' });
+        const { submission, error } = await Submission.find(short_id);
+        if (error) return res.status(404).json({ error });
+        res.status(200).json({ submission });
     }
-    // show
     // edit
     // delete (moderator vs user?)
 }
